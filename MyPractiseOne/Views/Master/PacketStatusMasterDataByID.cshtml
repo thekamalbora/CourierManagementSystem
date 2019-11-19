@@ -1,0 +1,109 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+
+<script src="~/scripts/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />
+<script src="~/scripts/bootstrap.min.js"></script>
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<style>
+    .modal-dialog {
+        width: 360px;
+    }
+
+    #pagination a {
+        display: inline-block;
+        margin-right: 5px;
+    }
+</style>
+
+<link href="~/Content/Custome.css" rel="stylesheet" />
+<br /><br />
+<div id="pager">
+    <ul id="pagination" class="pagination-sm"></ul>
+</div>
+
+<div class="container">
+    <h2 class="text-center text-uppercase pt-4">Packet Status Master</h2>
+
+    <span style="color: red; font-size: 15px;">* This Field Is Mandatory For The User</span>
+    <fieldset class="border p-2 scheduler-border">
+
+        <legend class="w-auto">Packet Status Master</legend>
+        <form>
+            <div class="form-group row">
+
+
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="hidden" id="hfPacketStatusID" value="0" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-10 col-lg-2 col-md-2">
+                    Packet Status ID:-<span style="color: red; font-size: 20px;">*</span>
+                </label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="text" id="txtPacketStatusID" class="form-control" autocomplete="off" name="PacketStatusID" placeholder="Packet Status ID" />
+                </div>
+             
+            </div>
+
+    
+            <div class="form-group row">
+                <label class="col-sm-9 col-lg-2 col-md-2 col-form-label"></label>
+                <div class="col-sm-10 col-lg-6 col-md-6">
+                    <input type="button" id="btnSave"  value="Search" class="btn btn-success btn-lg " />
+                   
+
+                </div>
+            </div>
+
+        </form>
+
+    </fieldset>
+</div>
+
+<div class="container">
+    <h2 class="text-center text-uppercase pt-4">Packet Status Record</h2>
+    <hr class="w-50 mx-auto pb-3 border-dark" />
+    <table class="table table-responsive table-stripped mytable" id="tbl">
+        <tr>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Packet&nbsp;ID</th>
+            <th scope="col">Status&nbsp;Date</th>
+            <th scope="col">Status&nbsp;Time</th>
+            <th scope="col">Location</th>
+            <th scope="col">Packet&nbsp;Status</th>
+            <th scope="col">Created&nbsp;By</th>
+            <th scope="col">Created&nbsp;Date</th>
+            <th scope="col">Modified&nbsp;By</th>
+            <th scope="col">Modified&nbsp;Date</th>
+        </tr>
+    </table>
+</div>
+
+<div class="row">
+  
+
+    <div class="row col-sm-12 col-lg-12 col-md-12">
+        <div class="col-sm-12 col-lg-12 col-md-12 mx-auto">
+            <div style="overflow-x:scroll;width:100%;max-width:100%">
+                <span id="lbPacketStatusDetails" class="lbl-responsive lbl-stripped pt-12"></span>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+
+
+<script src="~/scripts/PacketMasterDataByID.js"></script>

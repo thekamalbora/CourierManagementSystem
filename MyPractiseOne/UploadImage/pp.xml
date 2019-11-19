@@ -1,0 +1,21 @@
+<?xml version="1.0" standalone="yes"?>
+<DocumentElement>
+  <MyTable>
+    <DTID>1</DTID>
+    <PacketName>addfaf</PacketName>
+    <PacketType>Doc</PacketType>
+    <Weight>2</Weight>
+    <Length>2</Length>
+    <Width>3</Width>
+    <Height>2</Height>
+  </MyTable>
+  <MyTable>
+    <DTID>2</DTID>
+    <PacketName>dssfs</PacketName>
+    <PacketType>Doc</PacketType>
+    <Weight>2</Weight>
+    <Length>2</Length>
+    <Width>3</Width>
+    <Height>2</Height>
+  </MyTable>
+</DocumentElement>

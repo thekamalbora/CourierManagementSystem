@@ -1,0 +1,171 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+@{
+    ViewBag.Title = "CityMaster";
+}
+
+<script src="~/scripts/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+<script src="~/scripts/bootstrap.min.js"></script>
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<style>
+    .modal-dialog {
+        width: 360px;
+    }
+
+    #pagination a {
+        display: inline-block;
+        margin-right: 5px;
+    }
+</style>
+
+<link href="~/Content/Custome.css" rel="stylesheet" />
+<br /><br />
+<div id="pager">
+    <ul id="pagination" class="pagination-sm"></ul>
+</div>
+
+<div class="container">
+    <h2 class="text-center text-uppercase pt-4">Packet Status Master</h2>
+
+    <span style="color: red; font-size: 15px;">* This Field Is Mandatory For The User</span>
+    <fieldset class="border p-2 scheduler-border">
+
+        <legend class="w-auto">Packet Status Master</legend>
+        <form>
+            <div class="form-group row">
+
+
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="hidden" id="hfPacketStatusID" value="0" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-10 col-lg-2 col-md-2">
+                    Packet Status ID:-<span style="color: red; font-size: 20px;">*</span>
+                </label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="text" id="txtPacketStatusID" class="form-control" autocomplete="off" name="PacketStatusID" placeholder="Packet Status ID" />
+                </div>
+                <label class="col-sm-10 col-lg-2 col-md-2">Packet Status Date</label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="text" id="txtPacketStatusDate" class="form-control" autocomplete="off" name="PacketStatusDate" placeholder="Packet Status Date" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-10 col-lg-2 col-md-2">
+                    Packet Status Time<span style="color: red; font-size: 20px;">*</span>
+                </label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="text" id="txtPacketStatusTime" class="form-control" autocomplete="off" name="PacketStatusTime" placeholder="Packet Status Time" />
+                </div>
+                <label class="col-sm-10 col-lg-2 col-md-2">Packet Status<span style="color: red; font-size: 20px;">*</span></label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <select id="ddlPacketStatus" class="form-control">
+                        <option value="Select">Select</option>
+                        <option value="InTransit">In Transit</option>
+                        <option value="OFD">OFD</option>
+                        <option value="Diliverd">Diliverd</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-10 col-lg-2 col-md-2">
+                    Created By:-<span style="color: red; font-size: 20px;">*</span>
+                </label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="text" id="txtCreatedBy" class="form-control" autocomplete="off" name="CreatedBy" placeholder="Created By" />
+                </div>
+                <label class="col-sm-10 col-lg-2 col-md-2">Created Date</label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="text" id="txtCreatedDate" class="form-control" autocomplete="off" name="CreatedDate" placeholder="Created Date" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-10 col-lg-2 col-md-2">
+                    Modified By:-<span style="color: red; font-size: 20px;">*</span>
+                </label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="text" id="txtModifiedBy" class="form-control" autocomplete="off" name="ModifiedBy" placeholder="Modified By" />
+                </div>
+                <label class="col-sm-10 col-lg-2 col-md-2">Modified Date</label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="date" id="txtModifiedDate" class="form-control" autocomplete="off" name="ModifiedDate" placeholder="Modified Date" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-10 col-lg-2 col-md-2">
+                    Location:-<span style="color: red; font-size: 20px;">*</span>
+                </label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="text" id="txtLocation" class="form-control" autocomplete="off" name="Location" placeholder="Location" />
+                </div>
+               
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-9 col-lg-2 col-md-2 col-form-label"></label>
+                <div class="col-sm-10 col-lg-6 col-md-6">
+                    <input type="button" id="btnSave" value="Save" class="btn btn-success btn-lg " />
+                    <input type="button" id="btnreset" value="Reset" class="btn btn-danger btn-lg " onclick="Reset()" />
+                    
+                </div>
+            </div>
+
+        </form>
+
+    </fieldset>
+</div>
+
+<div class="container">
+    <h2 class="text-center text-uppercase pt-4">Packet Status Record</h2>
+    <hr class="w-50 mx-auto pb-3 border-dark" />
+    <table class="table table-responsive table-stripped mytable" id="tbl">
+        <tr>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Packet&nbsp;ID</th>
+            <th scope="col">Status&nbsp;Date</th>
+            <th scope="col">Status&nbsp;Time</th>
+            <th scope="col">Location</th>
+            <th scope="col">Packet&nbsp;Status</th>
+            <th scope="col">Created&nbsp;By</th>
+            <th scope="col">Created&nbsp;Date</th>
+            <th scope="col">Modified&nbsp;By</th>
+            <th scope="col">Modified&nbsp;Date</th>
+        </tr>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+            Total Number Of Record:-
+            <span id="TotalNoOfRecordPacketStatus"></span>
+        </h3>
+    </div>
+
+    <div class="row col-sm-12 col-lg-12 col-md-12">
+        <div class="col-sm-12 col-lg-12 col-md-12 mx-auto">
+            <div style="overflow-x:scroll;width:100%;max-width:100%">
+                <span id="lbPacketStatusDetails" class="lbl-responsive lbl-stripped pt-12"></span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="~/scripts/PacketStatusMaster.js?v=1"></script>

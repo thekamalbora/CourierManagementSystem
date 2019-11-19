@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "PincodeUse";
+}
+<script src="~/scripts/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script src="~/scripts/bootstrap.min.js"></script>
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<style>
+    .modal-dialog {
+        width: 360px;
+    }
+
+    #pagination a {
+        display: inline-block;
+        margin-right: 5px;
+    }
+</style>
+<link href="~/Content/Custome.css" rel="stylesheet" />
+<br /><br />
+<div id="pager">
+    <ul id="pagination" class="pagination-sm"></ul>
+</div>
+<div class="container">
+    <h2 class="text-center text-uppercase pt-4">PinCode Master Form</h2>
+    <span style="color: red; font-size: 15px;">* This Field Is Mandatory For The User</span>
+    <fieldset class="border p-2 scheduler-border">
+        <legend class="w-auto">Pincode Master</legend>
+        <form>
+            <div class="form-group row">
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="hidden" id="hfPincodeID" value="0" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-10 col-lg-2 col-md-2">
+                    PinCode<span style="color: red; font-size: 20px;">*</span>
+                </label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="text" id="txtPinCode" class="form-control"  autocomplete="off" name="PinCode" placeholder="PinCode" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-10 col-lg-2 col-md-2">
+                    Country Name:-<span style="color: red; font-size: 20px;">*</span>
+                </label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <select id="ddlCountry" class="form-control" onchange="GetStateCode()">
+                        <option value="0">Select</option>
+                    </select>
+                </div>
+                <label class="col-sm-10 col-lg-2 col-md-2">State Name</label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <select id="ddlState" class="form-control" onchange="GetCityCode()"></select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-10 col-lg-2 col-md-2">City Name</label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <select id="ddlcity" class="form-control"></select>
+                </div>
+                <label class="col-sm-10 col-lg-2 col-md-2">Active<span style="color: red; font-size: 20px;">*</span></label>
+                <div class="col-sm-10 col-lg-4 col-md-4">
+                    <input type="checkbox" name="chkbox" class="form-check-input" value="0" id="chckIsAactive" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-9 col-lg-2 col-md-2 col-form-label"></label>
+                <div class="col-sm-10 col-lg-6 col-md-6">
+                    <input type="button" id="btnSave" value="Save" class="btn btn-success btn-lg " />
+                    <input type="button" id="btnreset" value="Reset" class="btn btn-danger btn-lg " onclick="Reset()" />
+                    <input type="button" id="btnExport" value="Export To Excel" class="btn btn-warning btn-lg " onclick="exportexcel()" />
+                    <input type="button" id="btnExportPDF" value="Export To PDF" class="btn btn-primary btn-lg " onclick="exportpdf()" />
+                </div>
+            </div>
+        </form>
+    </fieldset>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+            Total Number Of Record:-
+            <span id="TotalNoOfRecordsInPincode"></span>
+        </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <span id="lbPincodeDetails"></span>
+    </div>
+</div>
+<script src="~/scripts/StateMaster.js"></script>
+<script src="~/scripts/CityMaster.js"></script>
+<script src="~/scripts/PincodeUse.js"></script>
