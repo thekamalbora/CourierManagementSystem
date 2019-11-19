@@ -1,0 +1,223 @@
+object[] ss = { PacketName.Split(','), PacketType.Split(','), PacketWeight.Split(','), PacketLength.Split(','), PacketWidth.Split(','), PacketHeight.Split(',') };
+
+
+
+
+
+function PacketInsertUpdateData() {
+
+    var PacketName = "";
+    var PacketType = "";
+    var PacketWeight = "";
+    var PacketLength = "";
+    var PacketWidth = "";
+    var PacketHeight = "";
+
+    var kk = $("#txtNoOfControls").val()
+    for (var i = 0; i < kk ; i++) {
+        if (PacketName == "") {
+            PacketName = $("#txtPacketName" + i).val();
+        }
+        else {
+            PacketName += ',' + $("#txtPacketName" + i).val();
+        }
+        if (PacketType == "") {
+            PacketType = $("#ddlPacketType" + i).val();
+        }
+        else {
+            PacketType += ',' + $("#ddlPacketType" + i).val();
+        }
+        if (PacketWeight == "") {
+            PacketWeight = $("#txtPacketWeight" + i).val();
+        }
+        else {
+            PacketWeight += ',' + $("#txtPacketWeight" + i).val();
+        }
+        if (PacketLength == "") {
+            PacketLength = $("#txtLength" + i).val();
+        }
+        else {
+            PacketLength += ',' + $("#txtLength" + i).val();
+        }
+        if (PacketWidth == "")
+        {
+            PacketWidth = $("#txtWidth" + i).val();
+        }
+        else
+        {
+            PacketWidth += ',' + $("#txtWidth" + i).val();
+        }
+        if (PacketHeight == "") 
+        {
+                PacketHeight = $("#txtHeight" + i).val();
+        }
+        else 
+        {
+                PacketHeight += ',' + $("#txtHeight" + i).val();
+        }
+        
+
+
+    }
+ 
+
+    $.ajax({
+        url: GlobalURL + "Master/PacketInsertUpdateData",
+        type: "POST",
+        data: {
+            PacketID: $("#hfPacketID").val(),
+            AWBNo: $("#txtawbno").val(),
+            ConsigerName: $("#txtConsignerName").val(),
+            ConsigerAddress: $("#txtConsignerAddress").val(),
+            ConsigerCountryCode: $("#ddlCountry").val(),
+            ConsigerStateCode: $("#ddlState").val(),
+            ConsigerCityName: $("#ddlCity").val(),
+            ConsigerPincode: $("#txtConsignerPincode").val(),
+            ConsigerPhoneNo: $("#txtConsignerPhoneNumber").val(),
+            ConsigerGSTNo: $("#txtConsignerGSTNumber").val(),
+            ConsigerFaxNo: $("#txtConsignerFaxNumber").val(),
+            ConsigneeName: $("#txtConsigneeName").val(),
+            ConsigneeAddress: $("#txtConsigneeAddress").val(),
+            ConsigneeCountryCode: $("#ddlConsigneeCountry").val(),
+            ConsigneeStateCode: $("#ddlConsigneeState").val(),
+            ConsigneeCityName: $("#ddlConsigneeCity").val(),
+            ConsigneePincode: $("#txtConsigneePincode").val(),
+            ConsigneePhoneNo: $("#txtConsigneePhoneNumber").val(),
+            ConsigneeGSTNo: $("#txtConsigneeGSTNumber").val(),
+            ConsigneeFaxNo: $("#txtConsigneeFaxNumber").val(),
+            PacketName: PacketName,
+            PacketType: PacketType,
+            PacketWeight: PacketWeight,
+            PacketLength: PacketLength,
+            PacketWidth: PacketWidth,
+            PacketHeight: PacketHeight,
+            NoOfControls:kk
+        },
+        success: function (data) {
+            data = JSON.parse(JSON.stringify(data));
+          
+            if (data.Status == "1" || data.Status == "2") {
+                alert("Record Saved");
+
+            } else {
+                alert(data.Msg);
+            }
+            if (data.Focus != "") {
+                $("#" + data.Focus).focus();
+            }
+        },
+        error: function () {
+            alert("Record not saved,Somethong wrong");
+        }
+    });
+}
+
+
+
+  [HttpPost]
+        public JsonResult PacketInsertUpdateData(int PacketID, string AWBNo, string ConsigerName, string ConsigerAddress,
+       string ConsigerCountryCode, string ConsigerStateCode, string ConsigerCityName, string ConsigerPincode,
+       string ConsigerPhoneNo, string ConsigerGSTNo, string ConsigerFaxNo, string ConsigneeName,
+       string ConsigneeAddress, string ConsigneeCountryCode, string ConsigneeStateCode, string ConsigneeCityName,
+       string ConsigneePincode, string ConsigneePhoneNo, string ConsigneeGSTNo, string ConsigneeFaxNo,
+       string PacketName, string PacketType, string PacketWeight, string PacketLength, string PacketWidth,
+       string PacketHeight,int NoOfControls)
+
+        {
+            DataTable dtPacket = new DataTable();
+            Dictionary<string, string> Dic = new Dictionary<string, string>();
+            Dic.Add("Msg", "");
+            Dic.Add("Status", "0");
+            Dic.Add("Focus", "");
+            try
+            {
+
+                if (AWBNo == "")
+                {
+                    Dic["Msg"] = "Please Enter AWBNO..!";
+                    Dic["Focus"] = "txtawbno";
+                }
+                else
+                {
+                    string[] packetName = PacketName.Split(',');
+                    string[] packetType = PacketType.Split(',');
+                    string[] packetWeight = PacketWeight.Split(',');
+                    string[] packetLength = PacketLength.Split(',');
+                    string[] packetWidth = PacketWidth.Split(',');
+                    string[] packetHeight = PacketHeight.Split(',');
+
+                    for (int i = 0; i < NoOfControls; i++)
+                    {
+                        packetName[i] = packetName[i].Trim();
+                        packetType[i] = packetType[i].Trim();
+                        packetWeight[i] = packetWeight[i].Trim();
+                        packetLength[i] = packetLength[i].Trim();
+                        packetWidth[i] = packetWidth[i].Trim();
+                        packetHeight[i] = packetHeight[i].Trim();
+
+                        con.Open();
+                        SqlCommand cmd = new SqlCommand("Sp_Packet_InsertUpdate", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@PacketID", PacketID);
+                        cmd.Parameters.AddWithValue("@AWBNo", AWBNo);
+                        cmd.Parameters.AddWithValue("@ConsigerName", ConsigerName);
+                        cmd.Parameters.AddWithValue("@ConsigerAddress", ConsigerAddress);
+                        cmd.Parameters.AddWithValue("@ConsigerCountryCode", ConsigerCountryCode);
+                        cmd.Parameters.AddWithValue("@ConsigerStateCode", ConsigerStateCode);
+                        cmd.Parameters.AddWithValue("@ConsigerCityName", ConsigerCityName);
+                        cmd.Parameters.AddWithValue("@ConsigerPincode", ConsigerPincode);
+                        cmd.Parameters.AddWithValue("@ConsigerPhoneNo", ConsigerPhoneNo);
+                        cmd.Parameters.AddWithValue("@ConsigerGSTNo", ConsigerGSTNo);
+                        cmd.Parameters.AddWithValue("@ConsigerFaxNo", ConsigerFaxNo);
+                        cmd.Parameters.AddWithValue("@ConsigneeName", ConsigneeName);
+                        cmd.Parameters.AddWithValue("@ConsigneeAddress", ConsigneeAddress);
+                        cmd.Parameters.AddWithValue("@ConsigneeCountryCode", ConsigneeCountryCode);
+                        cmd.Parameters.AddWithValue("@ConsigneeStateCode", ConsigneeStateCode);
+                        cmd.Parameters.AddWithValue("@ConsigneeCityName", ConsigneeCityName);
+                        cmd.Parameters.AddWithValue("@ConsigneePincode", ConsigneePincode);
+                        cmd.Parameters.AddWithValue("@ConsigneePhoneNo", ConsigneePhoneNo);
+                        cmd.Parameters.AddWithValue("@ConsigneeGSTNo", ConsigneeGSTNo);
+                        cmd.Parameters.AddWithValue("@ConsigneeFaxNo", ConsigneeFaxNo);
+                        cmd.Parameters.AddWithValue("@PacketName", packetName[i]);
+                        cmd.Parameters.AddWithValue("@PacketType", packetType[i]);
+                        cmd.Parameters.AddWithValue("@PacketWeight", PacketWeight == "" ? "0.0" : packetWeight[i]);
+                        cmd.Parameters.AddWithValue("@PacketLength", PacketLength == "" ? "0.0" : packetLength[i]);
+                        cmd.Parameters.AddWithValue("@PacketWidth", PacketWidth == "" ? "0.0" : packetWidth[i]);
+                        cmd.Parameters.AddWithValue("@PacketHeight", PacketHeight == "" ? "0.0" : packetHeight[i]);
+                        cmd.ExecuteReader();
+                        con.Close();
+
+
+                    }
+                }
+                    //if (Session["dtPacket"] != null)
+                    //{
+                    //    dtPacket = (DataTable)Session["dtPacket"];
+                    //    for (int i = 0; i < dtPacket.Rows.Count; i++)
+                    //    {
+                    //        con.Open();
+                    //        SqlCommand cmd1 = new SqlCommand("Sp_PacketDetails_InsertUpdate", con);
+                    //        cmd1.CommandType = CommandType.StoredProcedure;
+                    //        cmd1.Parameters.AddWithValue("@PacketID", PacketID);
+                    //        cmd1.Parameters.AddWithValue("@PacketName", dtPacket.Rows[i]["PacketName"].ToString());
+                    //        cmd1.Parameters.AddWithValue("@PacketType", dtPacket.Rows[i]["PacketType"].ToString());
+                    //        cmd1.Parameters.AddWithValue("@PacketWeight", Convert.ToInt32(dtPacket.Rows[i]["Weight"]));
+                    //        cmd1.Parameters.AddWithValue("@PacketLength", Convert.ToInt32(dtPacket.Rows[i]["Length"]));
+                    //        cmd1.Parameters.AddWithValue("@PacketWidth", Convert.ToInt32(dtPacket.Rows[i]["Width"]));
+                    //        cmd1.Parameters.AddWithValue("@PacketHeight", Convert.ToInt32(dtPacket.Rows[i]["Height"]));
+                    //        cmd1.ExecuteReader();
+                    //        con.Close();
+                    //    }
+                    //}
+                }
+
+
+
+
+            
+            catch (Exception ex)
+            {
+                Dic["Msg"] = ex.Message;
+            }
+            return Json(Dic);
+        }

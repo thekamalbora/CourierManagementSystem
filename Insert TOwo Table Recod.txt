@@ -1,0 +1,213 @@
+ALTER PROC Sp_Packet_InsertUpdate
+(
+	@PacketID Numeric(18,0),
+	@AWBNo Varchar(20),
+	@ConsigerName Varchar(50),
+	@ConsigerAddress Varchar(250),
+	@ConsigerCountryCode Varchar(10),
+	@ConsigerStateCode Varchar(10),
+	@ConsigerCityName Varchar(50), 
+	@ConsigerPincode Varchar(6), 
+	@ConsigerPhoneNo Varchar(12),
+	@ConsigerGSTNo Varchar(15),
+	@ConsigerFaxNo Varchar(12),
+	@ConsigneeName Varchar(50),
+	@ConsigneeAddress Varchar(250),
+	@ConsigneeCountryCode Varchar(10),
+	@ConsigneeStateCode Varchar(10),
+	@ConsigneeCityName Varchar(50), 
+	@ConsigneePincode Varchar(6), 
+	@ConsigneePhoneNo Varchar(12),
+	@ConsigneeGSTNo Varchar(15),
+	@ConsigneeFaxNo Varchar(12),
+	@PacketName Varchar(50),
+	@PacketType Varchar(20),
+	@PacketWeight varchar(50),
+	@PacketLength varchar(50),
+	@PacketWidth varchar(50),
+	@PacketHeight xml
+	)
+AS
+	BEGIN
+	Declare @Msg Varchar(Max)='',@Status Int= 0,@ID Numeric(18,0)= 0
+	If IsNull(@ConsigerName,'')=''
+	Set @Msg='Please Enter Your Consiger Name'
+	Else If isnull(@ConsigerAddress,'')=''
+	Set @Msg='Please Enter Your Consiger Address'
+	Else If isnull(@ConsigerPincode,'')=''
+	Set @Msg='Please Enter Your Consiger Pincode'
+	Else If isnull(@ConsigerPhoneNo,'')=''
+	Set @Msg='Please Enter Your Consiger PhoneNo'
+	Else If isnull(@ConsigerGSTNo,'')=''
+	Set @Msg='Please Enter Your Consiger GSTNo'
+	Else If isnull(@ConsigerFaxNo,'')=''
+	Set @Msg='Please Select Your Consiger FaxNo'
+	ELSE IF EXISTS(Select AWBNo From Packet Where AWBNo=@AWBNo)
+	Set @Msg='AWB Number Already Exist.'
+	Else If @PacketID=0
+	Begin
+		Insert Into Packet(AWBNo,ConsigerName,ConsigerAddress,ConsigerCountryCode,
+		ConsigerStateCode,ConsigerCityName,ConsigerPincode,ConsigerPhoneNo,ConsigerGSTNo,ConsigerFaxNo,ConsigneeName,
+		ConsigneeAddress,ConsigneeCountryCode,ConsigneeStateCode,ConsigneeCityName,ConsigneePincode,ConsigneePhoneNo,ConsigneeGSTNo,ConsigneeFaxNo)
+		Values(@AWBNo,@ConsigerName,@ConsigerAddress,@ConsigerCountryCode,@ConsigerStateCode,@ConsigerCityName,@ConsigerPincode,@ConsigerPhoneNo,
+		@ConsigerGSTNo,@ConsigerFaxNo,@ConsigneeName,@ConsigneeAddress,@ConsigneeCountryCode,@ConsigneeStateCode,@ConsigneeCityName,
+		@ConsigneePincode,@ConsigneePhoneNo,@ConsigneeGSTNo,@ConsigneeFaxNo)
+		Set @ID=SCOPE_IDENTITY();
+		If @ID>0
+		Begin
+			Set @Status=1
+			set @Msg='Record Saved Successfully'
+		End 
+
+	    Insert Into PacketDetails(PacketName,PacketType,PacketWeight,PacketLength,PacketWidth,PacketHeight,PacketID)
+		Values(@PacketName,@PacketType,@PacketWeight,@PacketLength,@PacketWidth,@PacketHeight,@ID)
+	End
+	Else
+		Begin
+			Update Packet Set AWBNo=@AWBNo,ConsigerName=@ConsigerName,
+			ConsigerAddress=@ConsigerAddress,ConsigerCountryCode=@ConsigerCountryCode,ConsigerStateCode=@ConsigerStateCode,
+			ConsigerCityName=@ConsigerCityName,ConsigerPincode=@ConsigerPincode,ConsigerPhoneNo=@ConsigerPhoneNo,ConsigerGSTNo=@ConsigerGSTNo,
+			ConsigerFaxNo=@ConsigerFaxNo,ConsigneeName=@ConsigneeName,ConsigneeAddress=@ConsigneeAddress,ConsigneeCountryCode=@ConsigneeCountryCode,
+			ConsigneeStateCode=@ConsigneeStateCode,ConsigneeCityName=@ConsigneeCityName,ConsigneePincode=@ConsigneePincode,
+			ConsigneePhoneNo=@ConsigneePhoneNo,ConsigneeGSTNo=@ConsigneeGSTNo,ConsigneeFaxNo=@ConsigneeFaxNo
+			 Where PacketID=@PacketID
+			Set @Status=2
+			Set @Msg='Record Updated Successfully'
+		End
+	Select @Msg As Msg,@Status As [Status]
+End
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        public JsonResult PacketInsertUpdateData(int PacketID, string AWBNo, string ConsigerName, string ConsigerAddress,
+       string ConsigerCountryCode, string ConsigerStateCode, string ConsigerCityName, string ConsigerPincode,
+       string ConsigerPhoneNo, string ConsigerGSTNo, string ConsigerFaxNo, string ConsigneeName,
+       string ConsigneeAddress, string ConsigneeCountryCode, string ConsigneeStateCode, string ConsigneeCityName,
+       string ConsigneePincode, string ConsigneePhoneNo, string ConsigneeGSTNo, string ConsigneeFaxNo, int PacketDetailsID,
+       string PacketName,string PacketType,string PacketWeight,string PacketLength,string PacketWidth,string PacketHeight)
+
+        {
+            DataTable dtPacket = new DataTable();
+            Dictionary<string, string> Dic = new Dictionary<string, string>();
+            Dic.Add("Msg", "");
+            Dic.Add("Status", "0");
+            Dic.Add("Focus", "");
+            try
+            {
+
+                if (AWBNo == "")
+                {
+                    Dic["Msg"] = "Please Enter AWBNO..!";
+                    Dic["Focus"] = "txtawbno";
+                }
+                else
+                {
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("Sp_Packet_InsertUpdate", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@PacketID", PacketID);
+                    cmd.Parameters.AddWithValue("@AWBNo", AWBNo);
+                    cmd.Parameters.AddWithValue("@ConsigerName", ConsigerName);
+                    cmd.Parameters.AddWithValue("@ConsigerAddress", ConsigerAddress);
+                    cmd.Parameters.AddWithValue("@ConsigerCountryCode", ConsigerCountryCode);
+                    cmd.Parameters.AddWithValue("@ConsigerStateCode", ConsigerStateCode);
+                    cmd.Parameters.AddWithValue("@ConsigerCityName", ConsigerCityName);
+                    cmd.Parameters.AddWithValue("@ConsigerPincode", ConsigerPincode);
+                    cmd.Parameters.AddWithValue("@ConsigerPhoneNo", ConsigerPhoneNo);
+                    cmd.Parameters.AddWithValue("@ConsigerGSTNo", ConsigerGSTNo);
+                    cmd.Parameters.AddWithValue("@ConsigerFaxNo", ConsigerFaxNo);
+                    cmd.Parameters.AddWithValue("@ConsigneeName", ConsigneeName);
+                    cmd.Parameters.AddWithValue("@ConsigneeAddress", ConsigneeAddress);
+                    cmd.Parameters.AddWithValue("@ConsigneeCountryCode", ConsigneeCountryCode);
+                    cmd.Parameters.AddWithValue("@ConsigneeStateCode", ConsigneeStateCode);
+                    cmd.Parameters.AddWithValue("@ConsigneeCityName", ConsigneeCityName);
+                    cmd.Parameters.AddWithValue("@ConsigneePincode", ConsigneePincode);
+                    cmd.Parameters.AddWithValue("@ConsigneePhoneNo", ConsigneePhoneNo);
+                    cmd.Parameters.AddWithValue("@ConsigneeGSTNo", ConsigneeGSTNo);
+                    cmd.Parameters.AddWithValue("@ConsigneeFaxNo", ConsigneeFaxNo);
+
+                    
+
+                if (Session["dtPacket"] != null)
+                    {
+                        dtPacket = (DataTable)Session["dtPacket"];
+                        for (int i = 0; i < dtPacket.Rows.Count; i++)
+                        {
+                          
+
+                            cmd.Parameters.AddWithValue("@PacketName", dtPacket.Rows[i]["PacketName"].ToString());
+                            cmd.Parameters.AddWithValue("@PacketType", dtPacket.Rows[i]["PacketType"].ToString());
+                            cmd.Parameters.AddWithValue("@PacketWeight", dtPacket.Rows[i]["Weight"]);
+                            cmd.Parameters.AddWithValue("@PacketLength", dtPacket.Rows[i]["Length"]);
+                            cmd.Parameters.AddWithValue("@PacketWidth", dtPacket.Rows[i]["Width"]);
+                            cmd.Parameters.AddWithValue("@PacketHeight", dtPacket.Rows[i]["Height"]);
+
+                            cmd.ExecuteReader();
+                        
+                            
+                        }
+                        
+                      
+                    }
+             
+                    con.Close();
+                    //if (Session["dtPacket"] != null)
+                    //{
+                    //    dtPacket = (DataTable)Session["dtPacket"];
+                    //    for (int i = 0; i < dtPacket.Rows.Count; i++)
+                    //    {
+                    //        con.Open();
+                    //        SqlCommand cmd1 = new SqlCommand("Sp_PacketDetails_InsertUpdate", con);
+                    //        cmd1.CommandType = CommandType.StoredProcedure;
+
+                    //        cmd1.Parameters.AddWithValue("@PacketName", dtPacket.Rows[i]["PacketName"].ToString());
+                    //        cmd1.Parameters.AddWithValue("@PacketType", dtPacket.Rows[i]["PacketType"].ToString());
+                    //        cmd1.Parameters.AddWithValue("@PacketWeight", dtPacket.Rows[i]["Weight"]);
+                    //        cmd1.Parameters.AddWithValue("@PacketLength", dtPacket.Rows[i]["Length"]);
+                    //        cmd1.Parameters.AddWithValue("@PacketWidth", dtPacket.Rows[i]["Width"]);
+                    //        cmd1.Parameters.AddWithValue("@PacketHeight",dtPacket.Rows[i]["Height"]);
+                    //        cmd1.Parameters.AddWithValue("@PacketDetailsID", PacketDetailsID);
+                    //        cmd1.Parameters.AddWithValue("@PacketID", PacketID);
+                    //        cmd1.ExecuteReader();
+                    //        con.Close();
+                    //    }
+
+                    //}
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Dic["Msg"] = ex.Message;
+            }
+            finally
+            {
+                con.Dispose();
+                con.Close();
+            }
+            return Json(Dic);
+        }
